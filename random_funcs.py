@@ -1,6 +1,18 @@
 import discord
+import asyncio
 import random
 from ids import ccchannels, ccroles
+
+async def play_intro(file, channel):
+    vc = await channel.connect()
+
+    source = discord.FFmpegPCMAudio(file)
+    vc.play(source)
+    while vc.is_playing():
+         await asyncio.sleep(1)
+    await vc.disconnect()
+
+
 
 async def give(guild: discord.Guild):
 

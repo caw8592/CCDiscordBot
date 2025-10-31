@@ -1,8 +1,7 @@
 import discord
 import youtube_commands
 from ids import ccchannels, ccusers
-import intro_songs
-import player_of_the_week
+import random_funcs
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -17,9 +16,9 @@ async def on_ready():
 async def on_voice_state_update(member, before, after):
     if(before.channel == None):
         match(member.id):
-            case ccusers.CAIDEN: await intro_songs.play_intro("mp3s/bbqchicken.mp3", after.channel)
-            case ccusers.MIKE: await intro_songs.play_intro("mp3s/mikeintro.mp3", after.channel)
-            case ccusers.KING: await intro_songs.play_intro("mp3s/kingintro.mp3", after.channel)
+            case ccusers.CAIDEN: await random_funcs.play_intro("mp3s/bbqchicken.mp3", after.channel)
+            case ccusers.MIKE: await random_funcs.play_intro("mp3s/mikeintro.mp3", after.channel)
+            case ccusers.KING: await random_funcs.play_intro("mp3s/kingintro.mp3", after.channel)
 
 @client.event
 async def on_message(message: discord.message):
@@ -32,7 +31,7 @@ async def on_message(message: discord.message):
     command = message.content.split(" ")[0]
     if(message.channel.id == ccchannels.MOD_CHANNEL):
         match(command):
-            case "$give_pow": await player_of_the_week.give(message.guild)
+            case "$give_pow": await random_funcs.give(message.guild)
             case _: await message.channel.send("not a command dumbass sir")
         return
     match(command):
