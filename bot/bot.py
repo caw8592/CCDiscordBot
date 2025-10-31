@@ -40,4 +40,4 @@ async def on_message(message: discord.message):
         case "$stop": youtube_commands.stop_player()
         case _: await message.channel.send("not a command dumbass")
 
-with(open("token.txt") as token): client.run(token.read())
+with(open("bot/token.txt") as token): client.run(token.read())
