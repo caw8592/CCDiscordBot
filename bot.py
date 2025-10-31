@@ -1,0 +1,44 @@
+import discord
+import youtube_commands
+from ids import ccchannels, ccusers
+import intro_songs
+import player_of_the_week
+
+intents = discord.Intents.default()
+intents.message_content = True
+intents.members = True
+client = discord.Client(intents=intents)
+
+@client.event
+async def on_ready():
+    print(f'We have logged in as {client.user}')
+
+@client.event
+async def on_voice_state_update(member, before, after):
+    if(before.channel == None):
+        match(member.id):
+            case ccusers.CAIDEN: await intro_songs.play_intro("mp3s/bbqchicken.mp3", after.channel)
+            case ccusers.MIKE: await intro_songs.play_intro("mp3s/mikeintro.mp3", after.channel)
+            case ccusers.KING: await intro_songs.play_intro("mp3s/kingintro.mp3", after.channel)
+
+@client.event
+async def on_message(message: discord.message):
+    if message.author == client.user:
+        return
+
+    if not message.content.startswith('$'):
+        return
+
+    command = message.content.split(" ")[0]
+    if(message.channel.id == ccchannels.MOD_CHANNEL):
+        match(command):
+            case "$give_pow": await player_of_the_week.give(message.guild)
+            case _: await message.channel.send("not a command dumbass sir")
+        return
+    match(command):
+        case "$play": await youtube_commands.play_youtube(message)
+        case "$skip": youtube_commands.skip_song()
+        case "$stop": youtube_commands.stop_player()
+        case _: await message.channel.send("not a command dumbass")
+
+with(open("token.txt") as token): client.run(token.read())
