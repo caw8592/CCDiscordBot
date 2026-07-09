@@ -35,9 +35,13 @@ async def on_message(message: discord.message):
             case _: await message.channel.send("not a command dumbass sir")
         return
     match(command):
-        case "$play": await youtube_commands.play_youtube(message)
-        case "$skip": youtube_commands.skip_song()
-        case "$stop": youtube_commands.stop_player()
+        case "$play":
+            await youtube_commands.play_youtube(message)
+        case "$skip":
+            await youtube_commands.skip_song(message)
+        case "$stop":
+            await youtube_commands.stop_player(message)
+
         case _: await message.channel.send("not a command dumbass")
 
-with(open("bot/token.txt") as token): client.run(token.read())
+with(open("token.txt") as token): client.run(token.read())

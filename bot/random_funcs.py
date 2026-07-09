@@ -12,8 +12,6 @@ async def play_intro(file, channel):
          await asyncio.sleep(1)
     await vc.disconnect()
 
-
-
 async def give(guild: discord.Guild):
 
     await guild.get_channel(ccchannels.MOD_CHANNEL).send("Choosing new player of the week...")
