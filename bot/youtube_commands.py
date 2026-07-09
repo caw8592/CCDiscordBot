@@ -106,6 +106,7 @@ async def _player_loop(guild: discord.Guild, text_channel: discord.abc.Messageab
     async def yt_stream_url(url: str) -> str:
         proc = await asyncio.create_subprocess_exec(
             "yt-dlp",
+            "--js-runtimes", "node:/usr/bin/node",
             "-f", "bestaudio",
             "--no-playlist",
             "-g", url,
