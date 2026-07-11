@@ -1,7 +1,8 @@
 import discord
 import youtube_commands
-from ids import ccchannels, ccusers
+from ids import ccusers
 import random_funcs
+import os
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -10,7 +11,7 @@ client = discord.Client(intents=intents)
 
 @client.event
 async def on_ready():
-    print(f'We have logged in as {client.user}')
+    print(f'Logged in as {client.user}')
 
 @client.event
 async def on_voice_state_update(member, before, after):
@@ -29,11 +30,6 @@ async def on_message(message: discord.message):
         return
 
     command = message.content.split(" ")[0]
-    if(message.channel.id == ccchannels.MOD_CHANNEL):
-        match(command):
-            case "$give_pow": await random_funcs.give(message.guild)
-            case _: await message.channel.send("not a command dumbass sir")
-        return
     match(command):
         case "$play":
             await youtube_commands.play_youtube(message)
@@ -44,4 +40,4 @@ async def on_message(message: discord.message):
 
         case _: await message.channel.send("not a command dumbass")
 
-with(open("token.txt") as token): client.run(token.read())
+client.run(os.environ["DISCORD_BOT_TOKEN"])

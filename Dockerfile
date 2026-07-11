@@ -12,7 +12,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN apt-get update && apt-get install -y python3-pip
 
-
 WORKDIR /app
 
 COPY requirements.txt .
@@ -24,7 +23,10 @@ RUN python3 -m pip install --no-cache-dir -U pip setuptools wheel \
  && python3 -m pip install --no-cache-dir -r requirements.txt \
  && rm -f requirements.txt
 
-
 COPY ./bot ./
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
 
 CMD ["python", "bot.py"]
