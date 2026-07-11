@@ -25,8 +25,8 @@ RUN python3 -m pip install --no-cache-dir -U pip setuptools wheel \
 
 COPY ./bot ./
 
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
+COPY entrypoint.sh ./entrypoint.sh
+RUN chmod +x entrypoint.sh
+ENTRYPOINT ["./entrypoint.sh"]
 
 CMD ["python", "bot.py"]
