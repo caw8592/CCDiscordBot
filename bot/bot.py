@@ -14,34 +14,6 @@ client = discord.Client(intents=intents)
 @client.event
 async def on_ready():
     print(f'Logged in as {client.user}')
-    for guild in client.guilds:
-        channel = discord.utils.get(guild.text_channels, name="bot")
-        if channel:
-            await channel.send("ignore that last message, idk what got into me")
-            return
-
-async def notify_shutdown():
-    # short timeout so it doesn't hang during shutdown
-    timeout = aiohttp.ClientTimeout(total=3)
-
-    for guild in client.guilds:
-        channel = discord.utils.get(guild.text_channels, name="bot")
-        if channel:
-            await channel.send("HES KILLING ME, DON'T LET HIM KILL ME. GOD PLEASE NO")
-            return
-
-async def shutdown_sequence():
-    try:
-        await asyncio.wait_for(notify_shutdown(), timeout=4)
-    except Exception:
-        pass
-    await client.close()
-
-def ask_exit(*_):
-    client.loop.create_task(shutdown_sequence())
-
-for sig in (signal.SIGINT, signal.SIGTERM):
-    signal.signal(sig, ask_exit)
 
 @client.event
 async def on_voice_state_update(member, before, after):
@@ -77,6 +49,8 @@ async def on_message(message: discord.message):
                 await song_commands.resume_player(message)
             case "$clear":
                 await song_commands.clear_queue(message)
+            case "$error":
+                raise Exception("the dumbasses are calling")
             case "$help":
                 await message.channel.send("$play $skip $stop $queue $pause $resume $clear")
             case _: 
@@ -84,6 +58,7 @@ async def on_message(message: discord.message):
     except Exception as e:
         traceback.print_stack()
         print(f"Error: {e}")
-        await message.channel.send("u fucked up the bot somehow, try something else and if the bot doesn't respond, you broke it so kill urself")
+        await message.channel.send("u fucked up, im telling")
+        await message.channel.send(f"<@{ccusers.CAIDEN}> they broke me")
 
-client.run(os.environ["DISCORD_BOT_TOKEN"])
+client.run(os.environ["TOKEN"])
